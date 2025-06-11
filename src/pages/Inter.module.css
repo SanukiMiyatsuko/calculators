@@ -1,0 +1,49 @@
+.main {
+  margin-right: 32px;
+  margin-left: 32px;
+  flex: 1;
+}
+
+.homeHead {
+  text-align: center;
+  font-size: xxx-large;
+  font-weight: bold;
+}
+
+.homeRdm {
+  text-align: center;
+  margin-top: 64px;
+  margin-bottom: 64px;
+  font-size: x-large;
+}
+
+.subHead {
+  text-align: left;
+  font-size: xx-large;
+  font-weight: bold;
+  user-select: none;
+}
+
+.notRdm {
+  margin-top: 16px;
+  margin-bottom: 32px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background-color: hsl(0, 0%, 28%);
+}
+
+.footer {
+  padding-bottom: 16px;
+  padding-left: 32px;
+  padding-right: 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  color: hsla(0, 0%, 100%, 0.534);
+}
+
+.a {
+  color: #1ab9be79;
+  text-decoration: none;
+}
+.a:hover {
+  color: #1ab9be;
+}
