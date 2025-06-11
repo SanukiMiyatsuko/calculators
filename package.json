@@ -6,7 +6,7 @@
   "homepage": "https://SanukiMiyatsuko.github.io/calculators",
   "scripts": {
     "test": "vitest",
-    "predeploy": "yarn build",
+    "predeploy": "yarn build && node copy404.js",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
