@@ -10,7 +10,7 @@ import GPS from "./pages/GPS/GPS"
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/calculators">
       <div className={styles.app}>
         <CreateHeader />
         <Routes>
