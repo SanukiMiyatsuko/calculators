@@ -23,6 +23,7 @@ const Page = ({
   const [printOutputKatex, setPrintOutputKatex] = useState("");
   const [outputError, setOutputError] = useState("");
   const [displayKatex, setDisplayKatex] = useState(false);
+  const [showHide, setShowHide] = useState(false);
 
   const handleOperation = (op: Operation) => {
     setOutputError("");
@@ -119,16 +120,28 @@ const Page = ({
           A &lt; B
         </button>
       </div>
-      <label className={styles.checkboxLabel}>
-        <input
-          name="displayKatex"
-          type="checkbox"
-          checked={displayKatex}
-          onChange={() => setDisplayKatex(!displayKatex)}
-        />
-        <span className={styles.customCheckbox}></span>
-        Texで表示
-      </label>
+      <input
+        type="button"
+        value="計算機オプション"
+        onClick={() => setShowHide(!showHide)}
+        className={styles.optionButton}
+      />
+      {showHide &&
+        <ul>
+          <li>
+            <label className={styles.checkboxLabel}>
+              <input
+                name="displayKatex"
+                type="checkbox"
+                checked={displayKatex}
+                onChange={() => setDisplayKatex(!displayKatex)}
+              />
+              <span className={styles.customCheckbox}></span>
+              Texで表示
+            </label>
+          </li>
+        </ul>
+      }
       <div className={styles.boxOutput}>
         {outputError ? (
           <p className={styles.danger}>{outputError}</p>
