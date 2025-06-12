@@ -31,7 +31,6 @@ function expand(s: number[], t: number): Result {
     }
     return i;
   })();
-  console.log(sc);
   const tp = (() => {
     let i = p(sc) + 1;
     while (i < s.length - 2) {
@@ -41,7 +40,6 @@ function expand(s: number[], t: number): Result {
     }
     return i;
   })();
-  console.log(tp);
   const replaced = s.slice(0, -1).concat([s[s.length - 1] - 1]);
   const BP = replaced.slice(tp + 1);
   const repeatBP = Array(t).fill(null).flatMap(() => BP);
