@@ -33,7 +33,7 @@ function expand(s: number[], t: number): Result {
   })();
   console.log(sc);
   const tp = (() => {
-    let i = p(sc);
+    let i = p(sc) + 1;
     while (i < s.length - 2) {
       if (lessThan(s.slice(p(sc) + 1), s.slice(i + 1)))
         break;
