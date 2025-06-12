@@ -8,6 +8,20 @@ export class gps implements Hyoki {
 }
 
 function expand(s: number[], t: number): Result {
+  if (s.length === 0) {
+    return {
+      badroot: null,
+      badpart: null,
+      result: [],
+    };
+  }
+  if (s[s.length - 1] <= 0) {
+    return {
+      badroot: null,
+      badpart: null,
+      result: s.slice(0, -1),
+    };
+  }
   const sp = (x: number): number => {
     let i = x;
     while (i > -1) {

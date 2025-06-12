@@ -1,6 +1,6 @@
 export type Result = {
-  badroot: number;
-  badpart: number[];
+  badroot: number | null;
+  badpart: number[] | null;
   result: number[];
 }
 

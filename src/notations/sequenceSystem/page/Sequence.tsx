@@ -62,11 +62,11 @@ const Page = ({
           const result = hyoki.expand(arrx, y).result;
           const inputstr = `expand(${strx}, ${y})`;
           const inputstrKatex = `\\text{expand}(${strx}, ${y})`;
-          const badpartStr = `[${badpart.map(x => x.toString()).join(",")}]`;
+          const badpartStr = badpart ? `[${badpart.map(x => x.toString()).join(",")}]` : "";
           const resultStr = `[${result.map(x => x.toString()).join(",")}]`;
           setPrintInput(inputstr);
           setPrintInputKatex(inputstrKatex);
-          setPrintBadroot(badroot.toString());
+          setPrintBadroot(badroot ? badroot.toString() : "");
           setPrintBadpart(badpartStr);
           setPrintOutput(resultStr);
           setPrintOutputKatex(resultStr);
