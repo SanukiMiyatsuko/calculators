@@ -1,6 +1,6 @@
 import { InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
-import styles from "../page/multiVariablesPsi.module.css";
+import styles from "../page/twoVariablesPsi.module.css";
 
 export const OutputText = ({
   input,

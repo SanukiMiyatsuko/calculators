@@ -1,7 +1,7 @@
 import { equal, psi, plus, sanitizePlusTerm, lessThan, ONE, OMEGA, type T, type ZT, type PT, ZERO, isPlus, isPsi, isZero } from "../../notations/multiVariablesPsi/models/Definition";
 import type { Hyoki } from "../../notations/multiVariablesPsi/models/Intersection";
 
-export class buchholz implements Hyoki {
+export class buchholzMulti implements Hyoki {
   fund(s: T, t: T): T {
     return fund(s, t);
   }

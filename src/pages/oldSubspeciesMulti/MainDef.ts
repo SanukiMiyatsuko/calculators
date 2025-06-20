@@ -1,7 +1,7 @@
 import { type ZT, type PT, type T, ZERO, equal, psi, plus, sanitizePlusTerm, ONE, OMEGA, isZero, isPlus, isPsi } from "../../notations/multiVariablesPsi/models/Definition";
 import type { Hyoki } from "../../notations/multiVariablesPsi/models/Intersection";
 
-export class oldSubspecies implements Hyoki {
+export class oldSubspeciesMulti implements Hyoki {
   fund(a: T, b: T): T {
     return fund(a, b);
   }

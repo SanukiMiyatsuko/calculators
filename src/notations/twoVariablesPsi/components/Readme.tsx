@@ -1,4 +1,4 @@
-import styles from "../page/multiVariablesPsi.module.css";
+import styles from "../page/twoVariablesPsi.module.css";
 
 export const Readme = ({
   HEAD,
