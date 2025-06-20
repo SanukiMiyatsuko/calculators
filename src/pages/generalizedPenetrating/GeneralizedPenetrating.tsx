@@ -1,8 +1,8 @@
 import Page from "../../notations/sequenceSystem/page/Sequence";
 import styles from "../Inter.module.css";
-import { gps } from "./MainDef";
+import { generalizedPenetrating } from "./MainDef";
 
-const GPS = () => {
+const GeneralizedPenetrating = () => {
   return (
     <>
       <main className={styles.main}>
@@ -11,11 +11,11 @@ const GPS = () => {
           入力は引用元のブログ記事の形式に従ってください。<br />
         </p>
         <Page
-          hyoki={new gps}
+          hyoki={new generalizedPenetrating}
         />
       </main>
     </>
   );
 };
 
-export default GPS;
+export default GeneralizedPenetrating;

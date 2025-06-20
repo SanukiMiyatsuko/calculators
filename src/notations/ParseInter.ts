@@ -42,6 +42,15 @@ export abstract class ParserInter<A> {
     this._pos += 1;
   }
 
+  protected expectStrHead() {
+    const ch = this._str[this._pos];
+    if (ch === undefined)
+      throw new ParseError(this._pos + 1, this._str, `これ以上文字がありません`);
+    if (VALID_CHARS.test(ch))
+      throw new ParseError(this._pos + 1, this._str, `ラベルに適さない文字が見つかりました`);
+    this._pos += 1;
+  }
+
   protected parseNat(): A {
     let nat = 0;
     while (this._pos < this._str.length) {

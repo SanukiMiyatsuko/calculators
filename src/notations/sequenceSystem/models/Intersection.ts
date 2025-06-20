@@ -1,9 +1,13 @@
+import type { List } from "../../ListInter";
+
+export type Sequence = List<number>;
+
 export type Result = {
   badroot: number | null;
-  badpart: number[] | null;
-  result: number[];
+  badpart: Sequence | null;
+  result: Sequence;
 }
 
 export interface Hyoki {
-  expand(s: number[], t: number): Result;
+  expand(s: Sequence, t: number): Result;
 }

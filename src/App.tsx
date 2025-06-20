@@ -6,7 +6,8 @@ import Subspecies from "./pages/subspecies/Subspecies"
 import OldSubspecies from "./pages/oldSubspecies/oldSubspecies"
 import Buchholz from "./pages/buchholz/Buchholz"
 import ExtendedWorm from "./pages/extendedWorm/ExtendedWorm"
-import GPS from "./pages/GPS/GPS"
+import GeneralizedPenetrating from "./pages/generalizedPenetrating/GeneralizedPenetrating"
+import SecondOrderSearching from "./pages/secondOrderSearching/SecondOrderSearching"
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route path="/oldSubspecies" element={<OldSubspecies />} />
           <Route path="/buchholz" element={<Buchholz />} />
           <Route path="/extendedWorm" element={<ExtendedWorm />} />
-          <Route path="/gps" element={<GPS />} />
+          <Route path="/generalizedPenetrating" element={<GeneralizedPenetrating />} />
+          <Route path="/secondOrderSearching" element={<SecondOrderSearching />} />
           <Route path="*" element={<h1>Not Found Page</h1>} />
         </Routes>
       </div>

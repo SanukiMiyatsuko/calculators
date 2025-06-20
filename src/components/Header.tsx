@@ -24,7 +24,8 @@ const CreateHeader = () => {
           <option value="/oldSubspecies">亞関数</option>
           <option value="/buchholz">ブーフホルツのψ</option>
           <option value="/extendedWorm">拡張ベクレミシェフの虫</option>
-          <option value="/gps">汎貫通数列</option>
+          <option value="/generalizedPenetrating">汎貫通数列</option>
+          <option value="/secondOrderSearching">2階探索数列</option>
         </select>
       </div>
     </header>

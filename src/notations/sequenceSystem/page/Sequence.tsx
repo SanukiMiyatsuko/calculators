@@ -3,7 +3,7 @@ import styles from "./Sequence.module.css"
 import { TextInput } from "../components/Input";
 import { OutputText } from "../components/Output";
 import type { Hyoki } from "../models/Intersection";
-import { lessThan } from "../models/Definition";
+import { Base } from "../../ListInter";
 
 type Operation = "expand" | "lessThan"
 
@@ -34,7 +34,9 @@ const Page = ({
       if (!/^\d+(,\d+)*$/.test(simpx))
         throw new Error("数列を入力してください");
       const arrx = simpx.split(",").map(x => parseInt(x, 10));
+      const listx = Base.fromArray(arrx);
       const strx = `[${arrx.map(x => x.toString()).join(",")}]`;
+      console.log(listx.arr);
 
       switch (op) {
         case "lessThan": {
@@ -44,8 +46,9 @@ const Page = ({
           if (!/^\d+(,\d+)*$/.test(simpy))
             throw new Error("数列を入力してください");
           const arry = simpy.split(",").map(x => parseInt(x, 10));
+          const listy = Base.fromArray(arry);
           const stry = `[${arry.map(x => x.toString()).join(",")}]`;
-          const result = lessThan(arrx, arry);
+          const result = listx.lex(listy);
           setPrintInput(`${strx} < ${stry}`);
           setPrintInputKatex(`${strx} \\lt ${stry}`);
           setPrintBadroot("");
@@ -57,17 +60,15 @@ const Page = ({
           if (!inputC)
             throw new Error("Cを入力してください");
           const y = parseInt(inputC);
-          const badroot = hyoki.expand(arrx, y).badroot;
-          const badpart = hyoki.expand(arrx, y).badpart;
-          const result = hyoki.expand(arrx, y).result;
-          const inputstr = `expand(${strx}, ${y})`;
-          const inputstrKatex = `\\text{expand}(${strx}, ${y})`;
-          const badpartStr = badpart ? `[${badpart.map(x => x.toString()).join(",")}]` : "";
+          const output = hyoki.expand(listx, y);
+          const badroot = output.badroot;
+          const badpart = output.badpart?.arr;
+          const result = output.result.arr;
           const resultStr = `[${result.map(x => x.toString()).join(",")}]`;
-          setPrintInput(inputstr);
-          setPrintInputKatex(inputstrKatex);
+          setPrintInput(`expand(${strx}, ${y})`);
+          setPrintInputKatex(`\\text{expand}(${strx}, ${y})`);
           setPrintBadroot(badroot ? badroot.toString() : "");
-          setPrintBadpart(badpartStr);
+          setPrintBadpart(badpart ? `[${badpart.map(x => x.toString()).join(",")}]` : "");
           setPrintOutput(resultStr);
           setPrintOutputKatex(resultStr);
           break;
