@@ -36,7 +36,6 @@ const Page = ({
       const arrx = simpx.split(",").map(x => parseInt(x, 10));
       const listx = Base.fromArray(arrx);
       const strx = `[${arrx.map(x => x.toString()).join(",")}]`;
-      console.log(listx.arr);
 
       switch (op) {
         case "lessThan": {
