@@ -47,7 +47,7 @@ function expand(s: Sequence, t: number): Result {
   })();
   const br = (() => {
     let i = p(pbp + 1) + 1;
-    while (i < s.lastIdx - 1) {
+    while (i <= p(pbp)) {
       if (s.slice(p(pbp) + 1).lex(s.slice(i + 1)))
         break;
       i++;
