@@ -8,13 +8,14 @@ export abstract class Base<A> {
   protected abstract readonly _arr: A[];
   protected abstract readonly _length: number;
 
-  static of<A>(...arr: A[]): List<A> {
-    return this.fromArray(arr);
+  static of<A>(...elements: A[]): List<A> {
+    return this.fromArray(elements);
   }
   static fromArray<A>(arr: A[]): List<A> {
     let result: List<A> = Nil.of<A>();
-    for (let i = arr.length - 1; i > -1; i--)
-      result = Cons.ofh(arr[i], result);
+    for (const e of arr) {
+      result = Cons.ofi(result, e);
+    }
     return result;
   }
 
@@ -53,7 +54,7 @@ export abstract class Base<A> {
     return undefined;
   }
   filter(f: (value: A, idx: number) => boolean): List<A> {
-    return this.flatMap((x, i) => f(x, i) ? Base.of(x) : Base.of());
+    return this.flatMap((x, i) => f(x, i) ? Base.of(x) : Nil.of());
   }
   findIdx(f: (value: A, idx: number) => boolean): number {
     return this._arr.findIndex(f);
@@ -85,6 +86,15 @@ export abstract class Base<A> {
       return false;
     return this.every((x, i) => x === other.elem(i));
   }
+  indexOf<B extends Equatable>(this: List<B>, target: B): number {
+    return this.findIdx(x => x === target);
+  }
+  lastIndexOf<B extends Equatable>(this: List<B>, target: B): number {
+    return this.findLastIdx(x => x === target);
+  }
+  allIndexOf<B extends Equatable>(this: List<B>, target: B): List<number> {
+    return this.findAllIdx(x => x === target);
+  }
   lex<B extends Comparable>(this: List<B>, other: List<B>): boolean {
     if (this.isNil())
       return other.isCons();
@@ -94,15 +104,6 @@ export abstract class Base<A> {
       if (this.elem(i) !== other.elem(i))
         return this.elem(i) < other.elem(i);
     return this.length < other.length;
-  }
-  indexOf<B extends Equatable>(this: List<B>, target: B): number {
-    return this.findIdx(x => x === target);
-  }
-  lastIndexOf<B extends Equatable>(this: List<B>, target: B): number {
-    return this.findLastIdx(x => x === target);
-  }
-  allIndexOf<B extends Equatable>(this: List<B>, target: B): List<number> {
-    return this.findAllIdx(x => x === target);
   }
   max<B extends Comparable>(this: List<B>, init: B): B {
     return this.reduce((a, c) => a > c ? a : c, init);
@@ -114,16 +115,14 @@ export abstract class Base<A> {
 
 export class Nil<A> extends Base<A> {
   protected readonly _type = "nil";
-  protected readonly _arr: A[];
-  protected readonly _length: number;
+  protected readonly _arr: A[] = [];
+  protected readonly _length = 0;
   private constructor() {
     super();
-    this._arr = [];
-    this._length = 0;
   }
 
   static of<A>(): Nil<A> {
-    return new Nil();
+    return new Nil<A>();
   }
 
   push(elem: A): Cons<A> {
@@ -157,57 +156,66 @@ export class Cons<A> extends Base<A> {
   protected readonly _type = "cons";
   protected readonly _arr: A[];
   protected readonly _length: number;
-  private readonly _head: A;
-  private readonly _tail: List<A>;
-  private constructor(head: A, tail: List<A>, arr: A[], length: number) {
+  private readonly _init: List<A>;
+  private readonly _last: A;
+  private constructor(init: List<A>, last: A, arr: A[], length: number) {
     super();
-    this._head = head;
-    this._tail = tail;
+    this._init = init;
+    this._last = last;
     this._arr = arr;
     this._length = length;
   }
 
-  static ofh<A>(head: A, tail: List<A>): Cons<A> {
+  static ofi<A>(init: List<A>, last: A): Cons<A> {
     const arr = (() => {
-      const result = [head];
-      let curr = tail;
+      const result = [last];
+      let curr = init;
       while (curr.isCons()) {
-        result.push(curr._head);
-        curr = curr._tail;
+        result.unshift(curr._last);
+        curr = curr._init;
       }
       return result;
     })();
-    return new Cons(head, tail, arr, arr.length);
+    return new Cons(init, last, arr, arr.length);
   }
-  static ofi<A>(init: List<A>, last: A): Cons<A> {
-    if (init.isNil())
-      return Cons.ofh(last, Nil.of());
-    return Cons.ofh(init._head, Cons.ofi(init._tail, last));
+
+  static ofh<A>(head: A, tail: List<A>): Cons<A> {
+    if (tail.isNil())
+      return Cons.ofi(Nil.of(), head);
+    return Cons.ofi(Cons.ofh(head, tail._init), tail._last);
   }
 
   get lastIdx(): number {
     return this._length - 1;
   }
-  get head(): A {
-    return this._head;
-  }
-  get tail(): List<A> {
-    return this._tail;
+  get init(): List<A> {
+    return this._init;
   }
   get last(): A {
-    return this._arr[this.lastIdx];
+    return this._last;
   }
-  get init(): List<A> {
-    if (this._tail.isNil())
-      return Nil.of();
-    return Cons.ofh(this._head, this._tail.init);
+  get head(): A {
+    return this._arr[0];
+  }
+  get tail(): List<A> {
+    return Base.fromArray(this._arr.slice(1));
   }
 
   elem(idx: number): A {
-    if (idx < 0 || idx >= this.length) {
+    if (idx < 0 || idx >= this.length)
       throw new Error("idxが範囲外です");
-    }
     return this._arr[idx];
+  }
+  replace(idx: number, elem: A): Cons<A> {
+    if (idx < 0 || idx >= this.length)
+      throw new Error("idxが範囲外です");
+    return this.map((x, i) => i === idx ? elem : x);
+  }
+  replaceLast(elem: A): Cons<A> {
+    return this.replace(this.lastIdx, elem);
+  }
+  replaceHead(elem: A): Cons<A> {
+    return this.replace(0, elem);
   }
 
   push(elem: A): Cons<A> {
@@ -217,46 +225,24 @@ export class Cons<A> extends Base<A> {
     return Cons.ofh(elem, this);
   }
   concat(other: List<A>): Cons<A> {
-    if (this._tail.isNil())
-      return Cons.ofh(this._head, other);
-    return Cons.ofh(this._head, this._tail.concat(other));
+    if (other.isNil())
+      return this;
+    return Cons.ofi(Base.fromArray(this._arr.concat(other._init.arr)), other._last);
   }
   take(end: number): List<A> {
-    if (end <= 0)
-      return Nil.of();
-    if (this._tail.isNil())
-      return this;
-    return Cons.ofh(this._head, this._tail.take(end - 1));
+    return Base.fromArray(this._arr.slice(0, end));
   }
   drop(start: number): List<A> {
-    if (start <= 0)
-      return this;
-    if (this._tail.isNil())
-      return Nil.of();
-    return this._tail.drop(start - 1);
+    return Base.fromArray(this._arr.slice(start));
   }
   slice(start?: number, end?: number): List<A> {
-    if (end === undefined) {
-      if (start === undefined)
-        return this;
-      return this.drop(start);
-    }
-    if (start === undefined)
-      return this.take(end);
-    return this.drop(start).take(end - start);
+    return Base.fromArray(this._arr.slice(start, end));
   }
 
   map<B>(f: (value: A, idx: number) => B): Cons<B> {
-    return this._mapHelper(f, 0);
-  }
-  private _mapHelper<B>(f: (value: A, idx: number) => B, idx: number): Cons<B> {
-    const head = f(this._head, idx);
-    const tail = this._tail.isCons()
-      ? this._tail._mapHelper(f, idx + 1)
-      : Nil.of<B>();
-    return Cons.ofh(head, tail);
+    return Cons.ofi(Base.fromArray(this._init.arr.map(f)), f(this._last, this.lastIdx));
   }
   reverse(): Cons<A> {
-    return Cons.ofh(this.last, this.init.reverse());
+    return Cons.ofi(this.tail.reverse(), this.head);
   }
 }
