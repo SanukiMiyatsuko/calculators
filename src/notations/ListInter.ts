@@ -167,15 +167,7 @@ export class Cons<A> extends Base<A> {
   }
 
   static ofi<A>(init: List<A>, last: A): Cons<A> {
-    const arr = (() => {
-      const result = [last];
-      let curr = init;
-      while (curr.isCons()) {
-        result.unshift(curr._last);
-        curr = curr._init;
-      }
-      return result;
-    })();
+    const arr = init.arr.concat([last]);
     return new Cons(init, last, arr, arr.length);
   }
 

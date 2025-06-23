@@ -1,4 +1,4 @@
-import { isPlus, isPsi, isZero, type T } from "./Definition";
+import { type T } from "./Definition";
 
 export type Options = {
   abbrOmega: boolean;
@@ -7,19 +7,8 @@ export type Options = {
   displayKatex: boolean;
 };
 
-function termToString(s: T): string {
-  if (isZero(s))
-    return "0";
-  else if (isPsi(s)) {
-    return `p_{${termToString(s.sub)}}(${termToString(s.arg)})`;
-  } else if (isPlus(s))
-    return s.add.map(x => termToString(x)).join("+");
-  else
-    throw new Error("termToString: 知らない型です");
-}
-
 export function abbreviate(s: T, head: string, options: Options): string {
-  let str = termToString(s);
+  let str = s.toString();
   str = str.replace(/p_\{0\}\(0\)/g, "1");
   if (options.abbrOmega)
     str = str.replace(/p_\{0\}\(1\)/g, "ω");

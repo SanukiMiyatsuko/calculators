@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./twoVariablesPsi.module.css";
 import { abbreviate, toKatex, type Options } from "../models/Characterization";
 import { Parser } from "../models/Parse";
-import { lessThan, type T } from "../models/Definition";
+import type { T } from "../models/Definition";
 import { Picture } from "../components/Picture";
 import { Readme } from "../components/Readme";
 import { TextInput } from "../components/Input";
@@ -44,7 +44,11 @@ const Page = ({
   const [inputHeadHeight, setInputHeadHeight] = useState(0);
   const [inputThickness, setInputThickness] = useState(3);
 
-  const abbreviateAndKatex = (term: T) => {
+  const abbreviateAndKatex = (term: T): {
+    term: T;
+    str: string;
+    katex: string;
+  } => {
     const str = abbreviate(term, HEAD, options);
     const katex = toKatex(str, HEAD);
     return {
@@ -85,7 +89,7 @@ const Page = ({
         case "lessThan": {
           if (!y)
             throw new Error("Bを入力してください");
-          const result = lessThan(x.term, y.term);
+          const result = x.term.lessThan(y.term);
           updateOutput(
             `${x.str} < ${y.str}`,
             `${x.katex} \\lt ${y.katex}`,
