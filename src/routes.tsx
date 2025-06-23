@@ -1,16 +1,16 @@
 import type { JSX } from "react"
-import SubspeciesTwo from "./pages/subspeciesTwo/SubspeciesTwo"
-import SubspeciesMulti from "./pages/subspeciesMulti/SubspeciesMulti"
-import OldSubspeciesTwo from "./pages/oldSubspeciesTwo/OldSubspeciesTwo"
-import OldSubspeciesMulti from "./pages/oldSubspeciesMulti/oldSubspeciesMulti"
-import BuchholzTwo from "./pages/buchholzTwo/BuchholzTwo"
-import BuchholzMulti from "./pages/buchholzMulti/BuchholzMulti"
-import Worm from "./pages/worm/Worm"
-import ExtendedWorm from "./pages/extendedWorm/ExtendedWorm"
-import SideWorm from "./pages/sideWorm/SideWorm"
-import ExtendedSideWorm from "./pages/extendedSideWorm/ExtendedSideWorm"
-import GeneralizedPenetrating from "./pages/generalizedPenetrating/GeneralizedPenetrating"
-import SecondOrderSearching from "./pages/secondOrderSearching/SecondOrderSearching"
+import SubspeciesTwo from "./pages/twoVariablesPsi/subspeciesTwo/SubspeciesTwo";
+import SubspeciesMulti from "./pages/multiVariablesPsi/subspeciesMulti/SubspeciesMulti";
+import OldSubspeciesTwo from "./pages/twoVariablesPsi/oldSubspeciesTwo/OldSubspeciesTwo";
+import OldSubspeciesMulti from "./pages/multiVariablesPsi/oldSubspeciesMulti/oldSubspeciesMulti";
+import BuchholzTwo from "./pages/twoVariablesPsi/buchholzTwo/BuchholzTwo";
+import BuchholzMulti from "./pages/multiVariablesPsi/buchholzMulti/BuchholzMulti";
+import Worm from "./pages/sequenceSystem/worm/Worm";
+import ExtendedWorm from "./pages/extendedSequenceSystem/extendedWorm/ExtendedWorm";
+import SideWorm from "./pages/sequenceSystem/sideWorm/SideWorm";
+import ExtendedSideWorm from "./pages/extendedSequenceSystem/extendedSideWorm/ExtendedSideWorm";
+import GeneralizedPenetrating from "./pages/sequenceSystem/generalizedPenetrating/GeneralizedPenetrating";
+import SecondOrderSearching from "./pages/sequenceSystem/secondOrderSearching/SecondOrderSearching";
 
 export const routes: {
   path: string;
