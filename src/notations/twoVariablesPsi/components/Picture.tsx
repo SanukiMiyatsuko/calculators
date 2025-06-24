@@ -148,7 +148,7 @@ const sketchInput = (p: P5CanvasInstance<MySketchProps>) => {
       const cy = hy(height);
       p.circle(cx, cy, nodeSize);
 
-      if (label) {
+      if (label !== null) {
         p.noStroke();
         p.fill(FRAME_COLOR);
         p.text(label, cx, cy);

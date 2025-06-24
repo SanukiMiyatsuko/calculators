@@ -1,94 +1,72 @@
-import { equal, psi, plus, sanitizePlusTerm, lessThan, ONE, OMEGA, type T, type ZT, type PT, ZERO, isPlus, isPsi, isZero } from "../../../notations/multiVariablesPsi/models/Definition";
+import { OMEGA, ONE, ZERO, type Psi, type T, type Zero } from "../../../notations/multiVariablesPsi/models/Definition";
 import type { Hyoki } from "../../../notations/multiVariablesPsi/models/Intersection";
 
 export class buchholzMulti implements Hyoki {
   fund(s: T, t: T): T {
-    return fund(s, t);
-  }
-
-  dom(s: T): ZT | PT {
-    return dom(s);
-  }
-}
-
-function dom(s: T): ZT | PT {
-  if (isZero(s))
-    return ZERO;
-  else if (isPsi(s)) {
-    let i_0 = 0;
-    while (i_0 < s.arr.length) {
-      if (!equal(s.arr[i_0]!, ZERO))
-        break;
-      i_0++;
-    }
-    if (i_0 === s.arr.length)
-      return ONE;
-    const domi_0 = dom(s.arr[i_0]!);
-    if (equal(domi_0, ONE)) {
-      if (i_0 === 0)
-        return OMEGA;
-      return s;
-    }
-    if (lessThan(domi_0, s))
-      return domi_0;
-    return OMEGA;
-  } else if (isPlus(s))
-    return dom(s.add[s.add.length - 1]!);
-  else
-    throw new Error("dom: 知らない型です");
-}
-
-function fund(s: T, t: T): T {
-  if (isZero(s))
-    return ZERO;
-  else if (isPsi(s)) {
-    let i_0 = 0;
-    while (i_0 < s.arr.length) {
-      if (!equal(s.arr[i_0]!, ZERO))
-        break;
-      i_0++;
-    }
-    if (i_0 === s.arr.length)
+    if (s.isZero())
       return ZERO;
-    const alpha = [...s.arr];
-    const domi_0 = dom(alpha[i_0]!);
-    if (equal(domi_0, ONE)) {
-      if (i_0 > 0)
-        return t;
-      if (equal(dom(t), ONE)) {
-        alpha[0] = fund(s.arr[0]!, ZERO);
-        return plus(fund(s, fund(t, ZERO)), psi(alpha));
+    else if (s.isPsi()) {
+      const i_0 = s.findIdx(x => !x.equal(ZERO));
+      if (i_0 === null)
+        return ZERO;
+      const domi_0 = this.dom(s.elem(i_0));
+      if (domi_0.equal(ONE)) {
+        if (i_0 > 0)
+          return t;
+        if (this.dom(t).equal(ONE)) {
+          const alpha = s.replace(0, this.fund(s.elem(0), ZERO));
+          return this.fund(s, this.fund(t, ZERO)).plus(alpha);
+        }
+        return ZERO;
       }
-      return ZERO;
-    }
-    if (lessThan(domi_0, s))
-      alpha[i_0] = fund(alpha[i_0]!, t);
-    else {
-      if (!isPsi(domi_0))
-        throw Error("なんでだよ");
-      let j_0 = 1;
-      while (j_0 < domi_0.arr.length) {
-        if (!equal(domi_0.arr[j_0]!, ZERO))
-          break;
-        j_0++;
-      }
-      if (equal(dom(t), ONE)) {
-        const p = fund(s, fund(t, ZERO));
-        if (!isPsi(p))
+      if (domi_0.lessThan(s))
+        return s.replace(i_0, this.fund(s.elem(i_0), t));
+      else {
+        if (!domi_0.isPsi())
           throw Error("なんでだよ");
-        const Gamma = p.arr[i_0]!;
-        const beta = [...domi_0.arr];
-        beta[j_0] = fund(beta[j_0]!, ZERO);
-        beta[j_0 - 1] = Gamma;
-        alpha[i_0] = fund(alpha[i_0]!, psi(beta));
-      } else
-        alpha[i_0] = fund(alpha[i_0]!, ZERO);
-    }
-    return psi(alpha);
-  } else if (isPlus(s)) {
-    const lastfund = fund(s.add[s.add.length - 1]!, t);
-    const remains = sanitizePlusTerm(s.add.slice(0, -1));
-    return plus(remains, lastfund);
-  } else
-    throw new Error("fund: 知らない型です");
+        let j_0 = 1;
+        while (j_0 < domi_0.lambda) {
+          if (!domi_0.elem(j_0).equal(ZERO))
+            break;
+          j_0++;
+        }
+        if (this.dom(t).equal(ONE)) {
+          const p = this.fund(s, this.fund(t, ZERO));
+          if (!p.isPsi())
+            throw Error("なんでだよ");
+          const Gamma = p.elem(i_0);
+          const beta = domi_0
+            .replace(j_0, this.fund(domi_0.elem(j_0), ZERO))
+            .replace(j_0 - 1, Gamma);
+          return s.replace(i_0, this.fund(s.elem(i_0), beta));
+        } else
+          return s.replace(i_0, this.fund(s.elem(i_0), ZERO));
+      }
+    } else if (s.isAdd()) {
+      return s.init.plus(this.fund(s.last, t));
+    } else
+      throw new Error("fund: 知らない型です");
+  }
+
+  dom(s: T): Zero | Psi {
+    if (s.isZero())
+      return ZERO;
+    else if (s.isPsi()) {
+      const i_0 = s.findIdx(x => !x.equal(ZERO));
+      if (i_0 === null)
+        return ONE;
+      const domi_0 = this.dom(s.args[i_0]);
+      if (domi_0.equal(ONE)) {
+        if (i_0 === 0)
+          return OMEGA;
+        return s;
+      }
+      if (domi_0.lessThan(s))
+        return domi_0;
+      return OMEGA;
+    } else if (s.isAdd())
+      return this.dom(s.last);
+    else
+      throw new Error("dom: 知らない型です");
+  }
 }

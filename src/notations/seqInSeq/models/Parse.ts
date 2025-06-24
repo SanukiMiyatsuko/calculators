@@ -2,10 +2,6 @@ import { ParseError, ParserInter } from "../../ParseInter";
 import { OMEGA, arrToSeq, ZERO, type Seq, fromNat } from "./Definition";
 
 export class Parser extends ParserInter<Seq> {
-  constructor(str: string) {
-    super(str);
-  }
-
   protected fromNat(n: number): Seq {
     return fromNat(n);
   }

@@ -55,7 +55,8 @@ export abstract class ParserInter<A> {
     let nat = 0;
     while (this._pos < this._str.length) {
       const ch = this._str[this._pos];
-      if (!/^\d$/.test(ch)) break;
+      if (!/^\d$/.test(ch))
+        break;
       nat = nat * 10 + parseInt(ch);
       this._pos += 1;
     }

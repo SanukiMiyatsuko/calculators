@@ -1,44 +1,32 @@
-import { ParseError, ParserInter } from "../../ParseInter";
-import { type PT, type T, ZERO, sanitizePlusTerm, psi, ONE, OMEGA, LOMEGA, IOTA, isZero, isPlus, isPsi } from "./Definition";
+import { ParserInter } from "../../ParseInter";
+import { IOTA, LOMEGA, OMEGA, ONE, Psi, ZERO, type T } from "./Definition";
 
 export class Parser extends ParserInter<T> {
-  constructor(str: string) {
-    super(str);
-  }
-
   protected fromNat(n: number): T {
     if (n <= 0)
       return ZERO;
-    const numterm: PT[] = [];
+    let numterm: T = ZERO;
     while (n > 0) {
-      numterm.push(ONE);
+      numterm = numterm.plus(ONE);
       n--;
     }
-    return sanitizePlusTerm(numterm);
+    return numterm;
   }
 
   parseTerm(): T {
-    let list: PT[] = [];
+    let list: T = ZERO;
     do {
-      let term: T;
-      if (/^\d$/.test(this._str[this._pos]))
-        term = this.parseNat();
-      else
-        term = this.parsePrincipal();
-
-      if (isZero(term))
-        throw new ParseError(this._pos + 1, this._str, `0は+で接続できません`);
-      else if (isPlus(term))
-        list = list.concat(term.add);
-      else if (isPsi(term))
-        list.push(term);
-      else
-        throw new ParseError(this._pos + 1, this._str, "知らない型です");
+      const term = (() => {
+        if (/^\d$/.test(this._str[this._pos]))
+          return this.parseNat();
+        return this.parsePrincipal();
+      })();
+      list = list.plus(term);
     } while (this.consume(/^\+$/))
-    return sanitizePlusTerm(list);
+    return list;
   }
 
-  parsePrincipal(): PT {
+  parsePrincipal(): Psi {
     if (this.consume(/^1$/))
       return ONE;
     else if (this.consume(/^[wω]$/))
@@ -48,17 +36,17 @@ export class Parser extends ParserInter<T> {
     else if (this.consume(/^I$/))
       return IOTA;
     else {
-      const argarr: T[] = [];
       this.consumeStrHead();
       this.expect(/^\($/);
       if (this.consume(/^\)$/))
         return ONE;
+      const argarr: T[] = [];
       do {
         const term = this.parseTerm();
         argarr.push(term);
       } while (this.consume(/^,$/))
       this.expect(/^\)$/);
-      return psi(argarr.reverse());
+      return Psi.of(argarr.reverse());
     }
   }
 }

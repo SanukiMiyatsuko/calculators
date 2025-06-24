@@ -106,7 +106,7 @@ export class Add extends Base {
       return Zero.of();
     if (list.length === 1)
       return list[0];
-    return Add.of(list);
+    return new Add(list);
   }
 
   get length(): number {

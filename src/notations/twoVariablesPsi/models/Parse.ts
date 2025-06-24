@@ -2,16 +2,12 @@ import { ParserInter } from "../../ParseInter";
 import { type T, ZERO, ONE, OMEGA, LOMEGA, Psi } from "./Definition";
 
 export class Parser extends ParserInter<T> {
-  constructor(str: string) {
-    super(str);
-  }
-
   protected fromNat(n: number): T {
     if (n <= 0)
       return ZERO;
-    const numterm: T = ZERO;
+    let numterm: T = ZERO;
     while (n > 0) {
-      numterm.plus(ONE);
+      numterm = numterm.plus(ONE);
       n--;
     }
     return numterm;

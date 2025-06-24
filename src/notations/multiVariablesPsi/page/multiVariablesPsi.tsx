@@ -2,8 +2,7 @@ import { useState } from "react";
 import styles from "./multiVariablesPsi.module.css";
 import { abbreviate, toKatex, type Options } from "../models/Characterization";
 import { Parser } from "../models/Parse";
-import { equalize, simplify, variableLength } from "../models/Normalization";
-import { lessThan, type T } from "../models/Definition";
+import type { T } from "../models/Definition";
 import { Picture } from "../components/Picture";
 import { Readme } from "../components/Readme";
 import { TextInput } from "../components/Input";
@@ -48,7 +47,7 @@ const Page = ({
   const [inputThickness, setInputThickness] = useState(3);
 
   const abbreviateAndKatex = (term: T, lambda: number, head: string, options: Options) => {
-    const eqTerm = options.fixedArraySize ? equalize(term, lambda) : term;
+    const eqTerm = options.fixedArraySize ? term.equalize(lambda) : term;
     const str = abbreviate(eqTerm, head, options);
     const katex = toKatex(str, head);
     return {
@@ -82,9 +81,9 @@ const Page = ({
     termX: T,
     termY: T | null = null,
   ) => {
-    const simplified = simplify(result);
-    const length = Math.max(variableLength(simplified), lambda);
-    const final = options.fixedArraySize ? equalize(simplified, length) : simplified;
+    const simplified = result.simpAll();
+    const length = Math.max(simplified.variableLength(), lambda);
+    const final = options.fixedArraySize ? simplified.equalize(length) : simplified;
     const str = abbreviate(final, HEAD, options);
     const katex = toKatex(str, HEAD);
 
@@ -96,10 +95,10 @@ const Page = ({
     setOutputError("");
     try {
       if (!inputA) throw new Error(`Aを入力してください`);
-      const simpX = simplify(new Parser(inputA).parseTerm());
-      const simpY = inputB ? simplify(new Parser(inputB).parseTerm()) : null;
+      const simpX = new Parser(inputA).parseTerm().simpAll();
+      const simpY = inputB ? new Parser(inputB).parseTerm().simpAll() : null;
 
-      const lambda = Math.max(variableLength(simpX), simpY ? variableLength(simpY) : 0);
+      const lambda = Math.max(simpX.variableLength(), simpY ? simpY.variableLength() : 0);
 
       const x = abbreviateAndKatex(simpX, lambda, HEAD, options);
       const y = simpY ? abbreviateAndKatex(simpY, lambda, HEAD, options) : null;
@@ -108,7 +107,7 @@ const Page = ({
         case "lessThan": {
           if (!y)
             throw new Error("Bを入力してください");
-          const result = lessThan(x.term, y.term);
+          const result = x.term.lessThan(y.term);
           updateOutput(
             `${x.str} < ${y.str}`,
             `${x.katex} \\lt ${y.katex}`,

@@ -1,115 +1,243 @@
-import { miniSimplify } from "./Normalization";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export type T = Zero | Psi | Add;
 
-export type ZT = { readonly type: "zero" };
-export type AT = { readonly type: "plus", readonly add: readonly PT[] };
-export type PT = { readonly type: "psi", readonly arr: readonly T[] };
-export type T = ZT | AT | PT;
+export abstract class Base {
+  protected abstract readonly _type: "zero" | "psi" | "add";
 
-export const isZero = (t: T): t is ZT => t.type === "zero";
-export const isPlus = (t: T): t is AT => t.type === "plus";
-export const isPsi = (t: T): t is PT => t.type === "psi";
+  isZero(): this is Zero {
+    return this._type === "zero"
+  }
+  isPsi(): this is Psi {
+    return this._type === "psi"
+  }
+  isAdd(): this is Add {
+    return this._type === "add"
+  }
 
-export function psi(arr: readonly T[]): PT {
-  const arrCopy = arr.slice();
-  return { type: "psi", arr: arrCopy };
+  abstract toArray(): Psi[];
+  abstract toString(): string;
+
+  plus(other: T): T {
+    return Add.of(this.toArray().concat(other.toArray()));
+  }
+
+  abstract simpAll(): T;
+  abstract variableLength(): number;
+  abstract equalize(n: number): T;
+
+  abstract equal(other: T): boolean;
+  abstract lessThan(other: T): boolean;
 }
 
-export function sanitizePlusTerm(add: PT[]): PT | AT {
-  if (add.length === 1)
-    return add[0]!;
-  else {
-    const addCopy = add.slice();
-    return { type: "plus", add: addCopy };
+export class Zero extends Base {
+  protected readonly _type = "zero";
+  private constructor() {
+    super();
+  }
+
+  static of(): Zero {
+    return new Zero();
+  }
+
+  toArray(): Psi[] {
+    return [];
+  }
+  toString(): string {
+    return `0`;
+  }
+
+  simpAll(): Zero {
+    return this;
+  }
+  variableLength(): number {
+    return 0;
+  }
+  equalize(_n: number): Zero {
+    return this;
+  }
+
+  equal(other: T): boolean {
+    return other.isZero();
+  }
+  lessThan(other: T): boolean {
+    return !other.isZero();
   }
 }
 
-export const ZERO: ZT = { type: "zero" };
-export const ONE: PT = psi([]);
-export const OMEGA: PT = psi([ONE]);
-export const LOMEGA: PT = psi([ZERO, ONE]);
-export const IOTA: PT = psi([ZERO, ZERO, ONE]);
+export class Psi extends Base {
+  protected readonly _type = "psi";
+  private readonly _args: T[];
+  private readonly _lambda: number;
+  private constructor(args: T[]) {
+    super();
+    this._args = args;
+    this._lambda = args.length;
+  }
 
-export function equal(s: T, t: T): boolean {
-  if (isZero(s))
-    return isZero(t);
-  else if (isPsi(s)) {
-    if (!isPsi(t))
+  static of(args: T[]): Psi {
+    return new Psi(args);
+  }
+
+  toArray(): Psi[] {
+    return [this];
+  }
+  toString(): string {
+    const original = this._args.slice().reverse();
+    return `p(${original.map(x => x.toString()).join(",")})`;
+  }
+
+  get args(): T[] {
+    return this._args;
+  }
+  get lambda(): number {
+    return this._lambda;
+  }
+
+  elem(idx: number): T {
+    return this._args[idx];
+  }
+  every(f: (value: T, idx: number) => boolean): boolean {
+    return this._args.every(f);
+  }
+  replace(idx: number, value: T): Psi {
+    return Psi.of(this._args.map((x, i) => i === idx ? value : x));
+  }
+  find(f: (value: T, idx: number) => boolean): T | null {
+    const finded = this._args.find(f);
+    return finded === undefined ? null : finded;
+  }
+  findIdx(f: (value: T, idx: number) => boolean): number | null {
+    const finded = this._args.findIndex(f);
+    return finded === -1 ? null : finded;
+  }
+
+  simp(): Psi {
+    const arr = this._args.slice();
+    while (arr.length > 0 && arr[arr.length - 1].isZero())
+      arr.pop();
+    return Psi.of(arr);
+  }
+  simpAll(): Psi {
+    return Psi.of(this.simp()._args.map(x => x.simpAll()));
+  }
+  variableLength(): number {
+    const lengthArray = this._args.map(x => x.variableLength());
+    return Math.max(...lengthArray, this._lambda);
+  }
+  equalize(n: number): Psi {
+    const equalized = this._args.map(x => x.equalize(n))
+      .concat(Array(n - this._lambda).fill(ZERO));
+    return Psi.of(equalized);
+  }
+
+  equal(other: T): boolean {
+    if (!other.isPsi())
       return false;
-    const sarr = miniSimplify(s.arr);
-    const tarr = miniSimplify(t.arr);
-    return (sarr.length === tarr.length
-      && sarr.every((e, i) => equal(e, tarr[i]!))
-    );
-  } else if (isPlus(s)) {
-    return (isPlus(t)
-      && t.add.length === s.add.length
-      && s.add.every((e, i) => equal(e, t.add[i]!))
-    );
-  } else
-    throw new Error("equal: 知らない型です");
+    const s = this.simp();
+    const t = other.simp();
+    return s._lambda === t._lambda
+      && s.every((x, i) => x.equal(t.elem(i)));
+  }
+  lessThan(other: T): boolean {
+    if (other.isZero())
+      return false;
+    if (other.isPsi()) {
+      const len = Math.max(this.lambda, other.lambda)
+      const sArgs = this._args.concat(Array(len - this.lambda).fill(ZERO));
+      const tArgs = other._args.concat(Array(len - other.lambda).fill(ZERO));
+      for (let i = sArgs.length - 1; i > -1; i--) {
+        const s = sArgs[i];
+        const t = tArgs[i];
+        if (!s.equal(t))
+          return s.lessThan(t);
+      }
+      return false;
+    }
+    return this.equal(other.head)
+      || this.lessThan(other.head);
+  }
 }
 
-export function lessThan(s: T, t: T): boolean {
-  if (isZero(s))
-    return t.type !== "zero";
-  else if (isPsi(s)) {
-    if (isZero(t))
-      return false;
-    else if (isPsi(t)) {
-      const len1 = s.arr.length;
-      const len2 = t.arr.length;
-      let sarr = s.arr;
-      let tarr = t.arr;
-      if (len1 < len2)
-        sarr = s.arr.concat(Array(len2 - len1).fill(ZERO));
-      else if (len2 < len1)
-        tarr = t.arr.concat(Array(len1 - len2).fill(ZERO));
+export class Add extends Base {
+  protected readonly _type = "add";
+  protected readonly _add: Psi[];
+  private constructor(plus: Psi[]) {
+    super();
+    this._add = plus.slice();
+  }
 
-      for (let k = sarr.length - 1; k >= 0; k--)
-        if (!equal(sarr[k]!, tarr[k]!))
-          return lessThan(sarr[k]!, tarr[k]!);
+  static of(list: Psi[]): T {
+    if (list.length === 0)
+      return Zero.of();
+    if (list.length === 1)
+      return list[0];
+    return new Add(list);
+  }
+
+  toArray(): Psi[] {
+    return this._add;
+  }
+  toString(): string {
+    return this._add.map(x => x.toString()).join("+");
+  }
+
+  get length(): number {
+    return this._add.length;
+  }
+  get lastIdx(): number {
+    return this._add.length - 1;
+  }
+  get init(): T {
+    return Add.of(this._add.slice(0, -1));
+  }
+  get last(): Psi {
+    return this._add[this.lastIdx];
+  }
+  get head(): Psi {
+    return this._add[0];
+  }
+  get tail(): T {
+    return Add.of(this._add.slice(1));
+  }
+
+  elem(idx: number): Psi {
+    return this._add[idx];
+  }
+  every(f: (value: Psi, idx: number) => boolean): boolean {
+    return this._add.every(f);
+  }
+
+  simpAll(): T {
+    const addArray = this._add.map(x => x.simpAll());
+    return Add.of(addArray);
+  }
+  variableLength(): number {
+    const addArray = this._add.map(x => x.variableLength());
+    return Math.max(...addArray);
+  }
+  equalize(n: number): T {
+    const addArray = this._add.map(x => x.equalize(n));
+    return Add.of(addArray);
+  }
+
+  equal(other: T): boolean {
+    return other.isAdd()
+      && this.length === other.length
+      && this.every((x, i) => x.equal(other.elem(i)));
+  }
+  lessThan(other: T): boolean {
+    if (other.isZero())
       return false;
-    } else if (isPlus(t))
-      return equal(s, t.add[0]!) || lessThan(s, t.add[0]!);
-    else
-      throw new Error("lessThan s psi, t: 知らない型です");
-  } else if (isPlus(s)) {
-    if (isZero(t))
-      return false;
-    else if (isPsi(t))
-      return lessThan(s.add[0]!, t)
-    else if (isPlus(t)) {
-      const s2 = sanitizePlusTerm(s.add.slice(1));
-      const t2 = sanitizePlusTerm(t.add.slice(1));
-      return lessThan(s.add[0]!, t.add[0]!) ||
-        (equal(s.add[0]!, t.add[0]!) && lessThan(s2, t2));
-    } else
-      throw new Error("lessThan s plus, t: 知らない型です");
-  } else
-    throw new Error("lessThan s: 知らない型です");
+    else if (other.isPsi())
+      return this.head.lessThan(other);
+    return this.head.lessThan(other.head)
+      || (this.head.equal(other.head)
+        && this.tail.lessThan(other.tail));
+  }
 }
 
-export function plus(s: T, t: T): T {
-  if (isZero(s))
-    return t;
-  else if (isPlus(s)) {
-    if (isZero(t))
-      return s;
-    else if (isPlus(t))
-      return { type: "plus", add: [...s.add, ...t.add] };
-    else if (isPsi(t))
-      return { type: "plus", add: [...s.add, t] };
-    else
-      throw new Error("plus t: 知らない型です");
-  } else if (isPsi(s)) {
-    if (isZero(t))
-      return s;
-    else if (isPlus(t))
-      return { type: "plus", add: [s, ...t.add] };
-    else if (isPsi(t))
-      return { type: "plus", add: [s, t] };
-    else
-      throw new Error("plus t: 知らない型です");
-  } else
-    throw new Error("plus s: 知らない型です");
-}
+export const ZERO: Zero = Zero.of();
+export const ONE: Psi = Psi.of([]);
+export const OMEGA: Psi = Psi.of([ONE]);
+export const LOMEGA: Psi = Psi.of([ZERO, ONE]);
+export const IOTA: Psi = Psi.of([ZERO, ZERO, ONE]);
