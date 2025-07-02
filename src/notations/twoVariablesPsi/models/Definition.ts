@@ -13,6 +13,10 @@ export abstract class Base {
     return this._type === "add"
   }
 
+  every(f: (value: Psi, idx: number) => boolean): boolean {
+    return this.toArray().every(f);
+  }
+
   abstract toArray(): Psi[];
   abstract toString(): string;
 
@@ -68,6 +72,19 @@ export class Psi extends Base {
   }
   get arg(): T {
     return this._arg;
+  }
+
+  get init(): T {
+    return ZERO;
+  }
+  get last(): Psi {
+    return this;
+  }
+  get head(): Psi {
+    return this;
+  }
+  get tail(): T {
+    return ZERO;
   }
 
   toArray(): Psi[] {
@@ -130,9 +147,6 @@ export class Add extends Base {
 
   elem(idx: number): Psi {
     return this._arr[idx];
-  }
-  every(f: (value: Psi, idx: number) => boolean): boolean {
-    return this._arr.every(f);
   }
 
   toArray(): Psi[] {

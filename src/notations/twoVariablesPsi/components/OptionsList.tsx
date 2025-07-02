@@ -12,9 +12,9 @@ export const OptionsList = ({
 }) => {
   const head = options.alwaysPsi ? "ψ" : HEAD;
   const optionItems: { key: keyof Options; label: string }[] = [
-    { key: "abbrOmega", label: `${head}(1)をωで出力` },
-    { key: "abbrLOmega", label: `${head}(1,0)をΩで出力` },
-    ...(HEAD !== "ψ" ? [{ key: "alwaysPsi" as keyof Options, label: `${head}をψで表示` }] : []),
+    { key: "abbrOmega", label: `${head}_0(1)をωで出力` },
+    { key: "abbrLOmega", label: `${head}_1(0)をΩで出力` },
+    ...(HEAD !== "ψ" ? [{ key: "alwaysPsi" as keyof Options, label: `${HEAD}をψで表示` }] : []),
     { key: "displayKatex", label: `TeXで出力` },
   ];
 

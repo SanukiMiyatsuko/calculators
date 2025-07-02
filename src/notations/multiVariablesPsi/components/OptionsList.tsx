@@ -16,7 +16,7 @@ export const OptionsList = ({
     { key: "abbrLOmega", label: `${head}(1,0)をΩで出力` },
     { key: "abbrIota", label: `${head}(1,0,0)をIで出力` },
     { key: "fixedArraySize", label: `変数の個数を最大数で固定して表示` },
-    ...(HEAD !== "ψ" ? [{ key: "alwaysPsi" as keyof Options, label: `${head}をψで表示` }] : []),
+    ...(HEAD !== "ψ" ? [{ key: "alwaysPsi" as keyof Options, label: `${HEAD}をψで表示` }] : []),
     { key: "displayKatex", label: `TeXで出力` },
   ];
 
