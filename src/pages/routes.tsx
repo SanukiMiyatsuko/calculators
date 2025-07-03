@@ -1,28 +1,32 @@
 import type { JSX } from "react"
-import SubspeciesTwo from "./twoVariablesPsi/subspeciesTwo/SubspeciesTwo";
-import SubspeciesMulti from "./multiVariablesPsi/subspeciesMulti/SubspeciesMulti";
-import ItalyTwo from "./twoVariablesPsi/italyTwo/ItalyTwo";
-import StomachTwo from "./twoVariablesPsi/stomachTwo/StomachTwo";
-import OldSubspeciesTwo from "./twoVariablesPsi/oldSubspeciesTwo/OldSubspeciesTwo";
-import OldSubspeciesMulti from "./multiVariablesPsi/oldSubspeciesMulti/oldSubspeciesMulti";
-import BTwo from "./twoVariablesPsi/bTwo/BTwo";
-import BuchholzTwo from "./twoVariablesPsi/buchholzTwo/BuchholzTwo";
-import BuchholzMulti from "./multiVariablesPsi/buchholzMulti/BuchholzMulti";
-import GoalTwo from "./twoVariablesPsi/goalTwo/GoalTwo";
-import BambooTwo from "./twoVariablesPsi/bambooTwo/BambooTwo";
-import MushroomTwo from "./twoVariablesPsi/mushroomTwo/MushroomTwo";
-import Worm from "./sequenceSystem/worm/Worm";
-import ExtendedWorm from "./extendedSequenceSystem/extendedWorm/ExtendedWorm";
-import SideWorm from "./sequenceSystem/sideWorm/SideWorm";
-import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/ExtendedSideWorm";
-import GeneralizedPenetrating from "./sequenceSystem/generalizedPenetrating/GeneralizedPenetrating";
-import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/SecondOrderSearching";
+import ZeroTwo from "./twoVariablesPsi/a-zero/Page";
+import ZeroMulti from "./multiVariablesPsi/a-zero/Page";
+import SubspeciesTwo from "./twoVariablesPsi/b-subspecies/Page";
+import SubspeciesMulti from "./multiVariablesPsi/b-subspecies/Page";
+import ItalyTwo from "./twoVariablesPsi/c-italy/Page";
+import StomachTwo from "./twoVariablesPsi/d-stomach/Page";
+import OldSubspeciesTwo from "./twoVariablesPsi/e-oldSubspecies/Page";
+import OldSubspeciesMulti from "./multiVariablesPsi/c-oldSubspecies/Page";
+import BTwo from "./twoVariablesPsi/f-b/Page";
+import BuchholzTwo from "./twoVariablesPsi/g-buchholz/Page";
+import BuchholzMulti from "./multiVariablesPsi/d-buchholz/Page";
+import GoalTwo from "./twoVariablesPsi/h-goal/Page";
+import BambooTwo from "./twoVariablesPsi/i-bamboo/Page";
+import MushroomTwo from "./twoVariablesPsi/j-mushroom/Page";
+import Worm from "./sequenceSystem/worm/Page";
+import ExtendedWorm from "./extendedSequenceSystem/extendedWorm/Page";
+import SideWorm from "./sequenceSystem/sideWorm/Page";
+import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/Page";
+import GeneralizedPenetrating from "./sequenceSystem/generalizedPenetrating/Page";
+import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/Page";
 
 export const routes: {
   path: string;
   name: string;
   element: JSX.Element;
 }[] = [
+  { path: "/zeroTwo", name: "〇関数", element: <ZeroTwo /> },
+  { path: "/zeroMulti", name: "多変数〇関数", element: <ZeroMulti /> },
   { path: "/subspeciesTwo", name: "亜関数", element: <SubspeciesTwo /> },
   { path: "/subspeciesMulti", name: "多変数亜関数", element: <SubspeciesMulti /> },
   { path: "/italyTwo", name: "伊関数", element: <ItalyTwo /> },

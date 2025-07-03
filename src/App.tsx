@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import styles from "./App.module.css"
 import CreateHeader from "./components/Header"
-import Home from "./pages/home/Home"
+import Home from "./pages/home/Page"
 import { routes } from "./pages/routes"
 
 function App() {
