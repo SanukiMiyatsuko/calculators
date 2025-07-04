@@ -23,12 +23,9 @@ export class oldSubspeciesMulti implements Hyoki {
       } else {
         if (!domi_0.isPsi())
           throw Error("なんでだよ");
-        let j_0 = 1;
-        while (j_0 < domi_0.lambda) {
-          if (!domi_0.elem(j_0).equal(ZERO))
-            break;
-          j_0++;
-        }
+        const j_0 = domi_0.findIdx(x => !x.equal(ZERO));
+        if (j_0 === null)
+          throw Error("なんでだよ");
         if (i_0 >= j_0) {
           return s.replace(i_0, this.fund(s.elem(i_0), t));
         } else {

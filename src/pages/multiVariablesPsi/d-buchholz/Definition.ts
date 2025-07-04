@@ -24,12 +24,9 @@ export class buchholzMulti implements Hyoki {
       else {
         if (!domi_0.isPsi())
           throw Error("なんでだよ");
-        let j_0 = 1;
-        while (j_0 < domi_0.lambda) {
-          if (!domi_0.elem(j_0).equal(ZERO))
-            break;
-          j_0++;
-        }
+        const j_0 = domi_0.findIdx(x => !x.equal(ZERO));
+        if (j_0 === null)
+          throw Error("なんでだよ");
         if (this.dom(t).equal(ONE)) {
           const p = this.fund(s, this.fund(t, ZERO));
           if (!p.isPsi())
