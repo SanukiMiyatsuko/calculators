@@ -41,7 +41,7 @@ export const routes: {
   { path: "/goalTwo", name: "Goal関数", element: <GoalTwo /> },
   { path: "/bambooTwo", name: "横竹関数", element: <BambooTwo /> },
   { path: "/mushroomTwo", name: "横茸関数", element: <MushroomTwo /> },
-  { path: "/twoPsiCode", name: "3-ψコード", element: <TwoPsiCode /> },
+  { path: "/twoPsiCode", name: "2-ψコード", element: <TwoPsiCode /> },
   { path: "/threePsiCode", name: "3-ψコード", element: <ThreePsiCode /> },
   { path: "/worm", name: "ベクレミシェフの虫", element: <Worm /> },
   { path: "/extendedWorm", name: "拡張ベクレミシェフの虫", element: <ExtendedWorm /> },
