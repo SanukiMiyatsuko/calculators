@@ -3,7 +3,7 @@ import styles from "./Sequence.module.css"
 import { TextInput } from "../components/Input";
 import { OutputText } from "../components/Output";
 import type { Hyoki } from "../models/Intersection";
-import { Base } from "../../ListInter";
+import { Base } from "../models/Definition";
 
 type Operation = "expand" | "lessThan"
 

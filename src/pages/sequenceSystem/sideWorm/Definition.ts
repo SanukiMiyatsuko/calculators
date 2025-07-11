@@ -1,4 +1,4 @@
-import { Nil } from "../../../notations/ListInter";
+import { Nil } from "../../../notations/sequenceSystem/models/Definition";
 import type { Hyoki, Result, Sequence } from "../../../notations/sequenceSystem/models/Intersection";
 
 export class sideWorm implements Hyoki {

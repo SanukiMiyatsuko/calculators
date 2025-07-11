@@ -1,4 +1,4 @@
-import type { List } from "../../ListInter";
+import type { List } from "./Definition";
 
 export type Sequence = List<number>;
 
