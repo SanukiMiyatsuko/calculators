@@ -32,23 +32,27 @@ function expand(s: Sequence, t: number): Result {
     return i;
   }
   const p = (x: number): number => {
-    if (x === 0)
+    if (x <= 0)
       return s.lastIdx;
-    return sp(p(x-1));
+    return sp(p(x - 1));
   }
   const pbp = (() => {
     let i = 1;
-    while (p(i + 1) > -1) {
-      if (s.slice(p(i + 1) + 1).lex(s.slice(p(i) + 1)))
-        break;
+    let pre = p(i - 1);
+    let cur = p(i);
+    while (cur > -1) {
+      if (s.slice(cur + 1).lex(s.slice(pre + 1)))
+        return cur;
       i++;
+      pre = cur;
+      cur = p(i);
     }
-    return i;
+    return cur;
   })();
   const br = (() => {
-    let i = p(pbp + 1) + 1;
+    let i = pbp + 1;
     while (i < s.lastIdx) {
-      if (!s.slice(i + 1).lex(s.slice(p(pbp) + 1)))
+      if (!s.slice(i + 1).lex(s.slice(pbp + 1)))
         break;
       i++;
     }

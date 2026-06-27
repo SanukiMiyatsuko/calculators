@@ -1,7 +1,7 @@
 import { Nil } from "../../../notations/sequenceSystem/models/Definition";
 import type { Hyoki, Result, Sequence } from "../../../notations/sequenceSystem/models/Intersection";
 
-export class generalizedPenetrating implements Hyoki {
+export class reSecondOrderSearching implements Hyoki {
   expand(s: Sequence, t: number): Result {
     return expand(s, t);
   }
@@ -12,7 +12,7 @@ function expand(s: Sequence, t: number): Result {
     return {
       badroot: null,
       badpart: null,
-      result: Nil.of(),
+      result: Nil.of()
     };
   const init = s.init;
   const last = s.last;
@@ -20,7 +20,7 @@ function expand(s: Sequence, t: number): Result {
     return {
       badroot: null,
       badpart: null,
-      result: init,
+      result: init
     };
   const sp = (x: number): number => {
     let i = x;
@@ -32,32 +32,36 @@ function expand(s: Sequence, t: number): Result {
     return i;
   }
   const p = (x: number): number => {
-    if (x === 0)
+    if (x <= 0)
       return s.lastIdx;
-    return sp(p(x-1));
+    return sp(p(x - 1));
   }
   const pbp = (() => {
     let i = 1;
-    while (p(i) > -1) {
-      if (s.slice(p(i) + 1).lex(s.slice(p(i - 1) + 1)))
-        break;
+    let pre = p(i - 1);
+    let cur = p(i);
+    while (cur > -1) {
+      if (s.slice(cur + 1).lex(s.slice(pre + 1)))
+        return cur;
       i++;
+      pre = cur;
+      cur = p(i);
     }
-    return i;
+    return cur;
   })();
-  const bp = (() => {
-    let i = p(pbp) + 1;
-    while (i < s.lastIdx - 1) {
-      if (s.slice(p(pbp) + 1).lex(s.slice(i + 1)))
+  const br = (() => {
+    let i = pbp + 1;
+    while (i < s.lastIdx) {
+      if (s.elem(i) < last && !s.slice(i + 1).lex(s.slice(pbp + 1)))
         break;
       i++;
     }
     return i;
   })();
   const replaced = init.push(last - 1);
-  const BP = replaced.slice(bp + 1);
+  const BP = replaced.slice(br + 1);
   return {
-    badroot: bp,
+    badroot: br,
     badpart: BP,
     result: replaced.concat(BP.cycle(t)),
   };

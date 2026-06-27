@@ -19,8 +19,8 @@ import Worm from "./sequenceSystem/worm/Page";
 import ExtendedWorm from "./extendedSequenceSystem/extendedWorm/Page";
 import SideWorm from "./sequenceSystem/sideWorm/Page";
 import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/Page";
-import GeneralizedPenetrating from "./sequenceSystem/generalizedPenetrating/Page";
 import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/Page";
+import ReSecondOrderSearching from "./sequenceSystem/reSecondOrderSearching/Page";
 
 export const routes: {
   path: string;
@@ -47,6 +47,6 @@ export const routes: {
   { path: "/extendedWorm", name: "拡張ベクレミシェフの虫", element: <ExtendedWorm /> },
   { path: "/sideWorm", name: "横ベクレミシェフ", element: <SideWorm /> },
   { path: "/extendedSideWorm", name: "拡張横ベクレミシェフ", element: <ExtendedSideWorm /> },
-  { path: "/generalizedPenetrating", name: "汎貫通数列", element: <GeneralizedPenetrating /> },
   { path: "/secondOrderSearching", name: "2階探索数列", element: <SecondOrderSearching /> },
+  { path: "/reSecondOrderSearching", name: "2階探索数列（再定式化版）", element: <ReSecondOrderSearching /> },
 ];
