@@ -51,7 +51,7 @@ function expand(s: Sequence, t: number): Result {
       return -1;
     let i = p2 + 1;
     while (i < p1) {
-      if (s.slice(i).lex(s.slice(p1)))
+      if (s.elem(i) < last && !s.slice(i + 1).lex(s.slice(p1 + 1)))
         break;
       i += 1;
     }
