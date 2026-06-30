@@ -42,13 +42,16 @@ function expand(s: Sequence, t: number): Result {
     }
     return null;
   }
-  const pbp = parent2(parent1(s.lastIdx));
   const br = (() => {
-    if (pbp === null)
+    const p1 = parent1(s.lastIdx);
+    if (p1 === null)
       return -1;
-    let i = pbp + 1;
-    while (i < s.lastIdx) {
-      if (s.elem(i) < last && !s.slice(i + 1).lex(s.slice(pbp + 1)))
+    const p2 = parent2(p1);
+    if (p2 === null)
+      return -1;
+    let i = p2 + 1;
+    while (i < p1) {
+      if (s.slice(i).lex(s.slice(p1)))
         break;
       i += 1;
     }

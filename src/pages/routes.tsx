@@ -21,7 +21,7 @@ import SideWorm from "./sequenceSystem/sideWorm/Page";
 import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/Page";
 import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/Page";
 import ReSecondOrderSearching from "./sequenceSystem/reSecondOrderSearching/Page";
-import GeneralizedPenetrating from "./sequenceSystem/GeneralizedPenetrating/Page";
+import GeneralizedPenetrating from "./sequenceSystem/generalizedPenetrating/Page";
 
 export const routes: { path: string; name: string; element: JSX.Element; }[] =
 [
