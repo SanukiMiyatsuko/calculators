@@ -21,12 +21,10 @@ import SideWorm from "./sequenceSystem/sideWorm/Page";
 import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/Page";
 import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/Page";
 import ReSecondOrderSearching from "./sequenceSystem/reSecondOrderSearching/Page";
+import GeneralizedPenetrating from "./sequenceSystem/GeneralizedPenetrating/Page";
 
-export const routes: {
-  path: string;
-  name: string;
-  element: JSX.Element;
-}[] = [
+export const routes: { path: string; name: string; element: JSX.Element; }[] =
+[
   { path: "/zeroTwo", name: "〇関数", element: <ZeroTwo /> },
   { path: "/zeroMulti", name: "多変数〇関数", element: <ZeroMulti /> },
   { path: "/subspeciesTwo", name: "亜関数", element: <SubspeciesTwo /> },
@@ -49,4 +47,5 @@ export const routes: {
   { path: "/extendedSideWorm", name: "拡張横ベクレミシェフ", element: <ExtendedSideWorm /> },
   { path: "/secondOrderSearching", name: "2階探索数列", element: <SecondOrderSearching /> },
   { path: "/reSecondOrderSearching", name: "2階探索数列（再定式化版）", element: <ReSecondOrderSearching /> },
+  { path: "/generalizedPenetrating", name: "汎貫通数列", element: <GeneralizedPenetrating /> },
 ];
