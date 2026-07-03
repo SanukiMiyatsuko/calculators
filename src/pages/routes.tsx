@@ -17,6 +17,7 @@ import TwoPsiCode from "./psiCode/twoPsiCode/Page";
 import ThreePsiCode from "./psiCode/threePsiCode/Page";
 import Worm from "./sequenceSystem/worm/Page";
 import ExtendedWorm from "./extendedSequenceSystem/extendedWorm/Page";
+import MBeklemishev from "./mSequenceSystem/mBeklemishev/Page";
 import SideWorm from "./sequenceSystem/sideWorm/Page";
 import ExtendedSideWorm from "./extendedSequenceSystem/extendedSideWorm/Page";
 import SecondOrderSearching from "./sequenceSystem/secondOrderSearching/Page";
@@ -45,6 +46,7 @@ export const routes: { path: string; name: string; element: JSX.Element; }[] =
   { path: "/extendedWorm", name: "拡張ベクレミシェフの虫", element: <ExtendedWorm /> },
   { path: "/sideWorm", name: "横ベクレミシェフ", element: <SideWorm /> },
   { path: "/extendedSideWorm", name: "拡張横ベクレミシェフ", element: <ExtendedSideWorm /> },
+  { path: "/mBeklemishev", name: "M-ベクレミシェフ", element: <MBeklemishev /> },
   { path: "/secondOrderSearching", name: "2階探索数列", element: <SecondOrderSearching /> },
   { path: "/reSecondOrderSearching", name: "2階探索数列（再定式化版）", element: <ReSecondOrderSearching /> },
   { path: "/generalizedPenetrating", name: "汎貫通数列", element: <GeneralizedPenetrating /> },
