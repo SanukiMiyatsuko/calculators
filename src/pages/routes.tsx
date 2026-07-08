@@ -13,6 +13,7 @@ import BuchholzMulti from "./multiVariablesPsi/d-buchholz/Page";
 import GoalTwo from "./twoVariablesPsi/h-goal/Page";
 import BambooTwo from "./twoVariablesPsi/i-bamboo/Page";
 import MushroomTwo from "./twoVariablesPsi/j-mushroom/Page";
+import MBekPsi from "./otherTwoVariablesPsi/mBekPsi/Page";
 import TwoPsiCode from "./psiCode/twoPsiCode/Page";
 import ThreePsiCode from "./psiCode/threePsiCode/Page";
 import Worm from "./sequenceSystem/worm/Page";
@@ -40,6 +41,7 @@ export const routes: { path: string; name: string; element: JSX.Element; }[] =
   { path: "/goalTwo", name: "Goal関数", element: <GoalTwo /> },
   { path: "/bambooTwo", name: "横竹関数", element: <BambooTwo /> },
   { path: "/mushroomTwo", name: "横茸関数", element: <MushroomTwo /> },
+  { path: "/mBekPsi", name: "M-ベクレミシェフψ", element: <MBekPsi /> },
   { path: "/twoPsiCode", name: "2-ψコード", element: <TwoPsiCode /> },
   { path: "/threePsiCode", name: "3-ψコード", element: <ThreePsiCode /> },
   { path: "/worm", name: "ベクレミシェフの虫", element: <Worm /> },
