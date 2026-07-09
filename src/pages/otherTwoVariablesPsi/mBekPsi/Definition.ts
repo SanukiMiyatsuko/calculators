@@ -121,7 +121,6 @@ function parent(s: Add | Psi, n: number): number | null {
 }
 
 function fp(s: Add | Psi, x: number, n: number): number | null {
-  if (n < 0) return x - 1;
   let current = x;
   for (let k = n; k > 0; k--) {
     const u = pSet(s, n).find(i => x < i);
@@ -133,7 +132,6 @@ function fp(s: Add | Psi, x: number, n: number): number | null {
 }
 
 function tp(s: Add | Psi, M: number): number | null {
-  const lasts = last(s);
   const plist: number[] = [];
   for (let m = 0; m <= M; m++) {
     const pm = parent(s, m);
@@ -142,7 +140,7 @@ function tp(s: Add | Psi, M: number): number | null {
     const spm = idxOf(s, pm);
     if (spm === null)
       return null;
-    if (spm < lasts - 1) return pm;
+    if (spm < last(s) - 1) return pm;
     for (let n = 1; n < M - 1 && n < m; n++)
       if (drop(s, pm).lessThan(slice(s, plist[n], plist[n - 1])))
         return fp(s, pm, n);
