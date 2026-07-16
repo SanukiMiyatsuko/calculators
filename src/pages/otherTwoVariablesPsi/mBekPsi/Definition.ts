@@ -110,8 +110,6 @@ function pSet(s: Add | Psi, n: number): number[] {
 
 function parent(s: Add | Psi, n: number): number | null {
   const len = length(s);
-  if (len === 0)
-    return null;
   if (n <= 0)
     return len - 1;
   const Pn = pSet(s, n);
@@ -120,32 +118,27 @@ function parent(s: Add | Psi, n: number): number | null {
   return Pn[Pn.length - 1];
 }
 
-function fp(s: Add | Psi, x: number, n: number): number | null {
-  let current = x;
-  for (let k = n; k > 0; k--) {
-    const u = pSet(s, n).find(i => x < i);
-    if (u === undefined)
-      return null;
-    current = u;
-  }
-  return current;
-}
+const uncle = (s: Add | Psi, x: number, n: number): number =>
+  pSet(s, n).find(i => x < i) ?? length(s) - 1;
 
-function tp(s: Add | Psi, M: number): number | null {
-  const plist: number[] = [];
-  for (let m = 0; m <= M; m++) {
+function tp(s: Add | Psi, M: number): [number, number | null] | null {
+  if (M <= 0) return [length(s) - 1, null];
+  const plist = [length(s) - 1];
+  for (let m = 1; m <= M; m++) {
     const pm = parent(s, m);
     if (pm === null) return null;
     plist.push(pm);
     const spm = idxOf(s, pm);
     if (spm === null)
       return null;
-    if (spm < last(s) - 1) return pm;
+    if (spm < last(s) - 1)
+      return [pm + 1, null];
     for (let n = 1; n < M - 1 && n < m; n++)
       if (drop(s, pm).lessThan(slice(s, plist[n], plist[n - 1])))
-        return fp(s, pm, n);
+        return [uncle(s, pm, n), plist[n - 1] + 1];
   }
-  return fp(s, plist[M], M - 1);
+  const u = uncle(s, plist[M], M - 1);
+  return M === 1 ? [u, null] : [u, plist[M - 2] + 1];
 }
 
 function replace(s: T, x: number): T {
@@ -205,9 +198,23 @@ function fundNum(s: T, t: number, M: number): T {
   }
   const tps = tp(s, M);
   const GP = replace(s, lasts - 1);
+  if (tps === null) {
+    if (t <= 0)
+      return GP;
+    const BP = Psi.of(Add.of(Array(lasts - 1).fill(ONE)), GP);
+    return replaceTerm(fundNum(s, t - 1, M), BP);
+  }
+  const p = tps[0];
+  const i = tps[1];
+  if (i === null) {
+    if (t <= 0)
+      return GP;
+    const BP = Psi.of(Add.of(Array(lasts - 1).fill(ONE)), drop(GP, p));
+    return replaceTerm(fundNum(s, t - 1, M), BP);
+  }
+  const base = take(GP, i);
+  const step = slice(GP, p, i);
   if (t <= 0)
-    return GP;
-  if (tps === null)
-    return replaceTerm(fundNum(s, t - 1, M), Psi.of(Add.of(Array(lasts - 1).fill(ONE)), GP));
-  return replaceTerm(fundNum(s, t - 1, M), drop(GP, tps));
+    return base;
+  return replaceTerm(fundNum(s, t - 1, M), step);
 }
