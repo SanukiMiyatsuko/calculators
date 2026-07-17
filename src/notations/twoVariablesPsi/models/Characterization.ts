@@ -12,8 +12,9 @@ export function abbreviate(s: T, head: string, options: Options): string {
   str = str.replace(/p_\{0\}\(0\)/g, "1");
   if (options.abbrOmega)
     str = str.replace(/p_\{0\}\(1\)/g, "ω");
+  console.log(str);
   if (options.abbrLOmega)
-    str = str.replace(/p\{1\}\(0\)/g, "Ω");
+    str = str.replace(/p_\{1\}\(0\)/g, "Ω");
   str = str.replace(/(?:1\+)+1/g, match => {
     const count = (match.match(/1/g) || []).length;
     return count.toString();

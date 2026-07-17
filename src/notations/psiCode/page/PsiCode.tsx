@@ -53,8 +53,8 @@ const Page = ({
     const katex = toKatex(str, head);
     return {
       term: eqTerm,
-      str: str,
-      katex: katex,
+      str,
+      katex,
     };
   };
 
