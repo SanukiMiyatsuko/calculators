@@ -186,9 +186,11 @@ function fundNum(s: T, t: number, M: number): T {
     }
     const a = s.sub;
     const b = s.arg;
+    if (b.isZero())
+      return ZERO;
     const bArr = b.toArray();
     const bLast = bArr[bArr.length - 1];
-    if (!b.isZero() && bLast.equal(ONE)) {
+    if (bLast.equal(ONE)) {
       if (t <= 0)
         return ZERO;
       const bInit = Add.of(bArr.slice(0, -1));
