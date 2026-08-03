@@ -214,8 +214,8 @@ function fundNum(s: T, t: number, M: number): T {
     const BP = Psi.of(Add.of(Array(lasts - 1).fill(ONE)), drop(GP, p));
     return replaceTerm(fundNum(s, t - 1, M), BP);
   }
-  const base = take(GP, i);
-  const step = slice(GP, p, i);
+  const base = take(take(GP, i), i);
+  const step = drop(GP, p);
   if (t <= 0)
     return base;
   return replaceTerm(fundNum(s, t - 1, M), step);
