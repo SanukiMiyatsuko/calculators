@@ -49,15 +49,11 @@ function expand(s: Sequence, t: number): Result {
     }
     return cur;
   })();
-  const br = (() => {
-    let i = pbp + 1;
-    while (i < s.lastIdx) {
-      if (s.elem(i) < last && !s.slice(i + 1).lex(s.slice(pbp + 1)))
-        break;
-      i++;
-    }
-    return i;
-  })();
+  const cbr = Array.from({ length: s.length }, (_, i) => i)
+    .slice(p(pbp)).filter(t => s.elem(t) < last);
+  const br = cbr.length === 0
+    ? s.length - 1
+    : cbr.reduce((maxT, t) => s.slice(maxT + 1).lex(s.slice(t + 1)) ? t : maxT);
   const replaced = init.push(last - 1);
   const BP = replaced.slice(br + 1);
   return {
