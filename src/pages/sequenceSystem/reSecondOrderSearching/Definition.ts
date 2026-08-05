@@ -36,7 +36,7 @@ function expand(s: Sequence, t: number): Result {
       return s.lastIdx;
     return sp(p(x - 1));
   }
-  const pbp = (() => {
+  const pbp = (() => { // pに入れた後の値を返す
     let i = 1;
     let pre = p(i - 1);
     let cur = p(i);
@@ -50,9 +50,9 @@ function expand(s: Sequence, t: number): Result {
     return cur;
   })();
   const cbr = Array.from({ length: s.length }, (_, i) => i)
-    .slice(p(pbp)).filter(t => s.elem(t) < last);
+    .slice(pbp).filter(t => s.elem(t) < last);
   const br = cbr.length === 0
-    ? s.length - 1
+    ? s.length - 2
     : cbr.reduce((maxT, t) => s.slice(maxT + 1).lex(s.slice(t + 1)) ? t : maxT);
   const replaced = init.push(last - 1);
   const BP = replaced.slice(br + 1);
