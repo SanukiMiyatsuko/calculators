@@ -52,7 +52,7 @@ function expand(s: Sequence, t: number): Result {
   const cbr = Array.from({ length: s.length }, (_, i) => i)
     .slice(pbp).filter(t => s.elem(t) < last);
   const br = cbr.length === 0
-    ? s.length - 2
+    ? 0
     : cbr.reduce((maxT, t) => s.slice(maxT + 1).lex(s.slice(t + 1)) ? t : maxT);
   const replaced = init.push(last - 1);
   const BP = replaced.slice(br + 1);
